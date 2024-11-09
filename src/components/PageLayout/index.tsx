@@ -35,7 +35,7 @@ export const PageLayout = (props: Props) => {
           </Typography.Title>
         </div>
       </Header>
-      <Layout style={{ marginTop: 128, marginBottom: 128 }}>{children}</Layout>
+      <Layout style={{ marginTop: 72, marginBottom: 72 }}>{children}</Layout>
     </Layout>
   );
 };

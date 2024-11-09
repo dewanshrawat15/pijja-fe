@@ -1,17 +1,11 @@
 import React from "react";
-import { Col, Layout, Row, Typography } from "antd";
+import { Col, Row, Typography } from "antd";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 import { PageLayout } from "../../components/PageLayout";
 
-const { Header } = Layout;
-
 export const HomeScreen: React.FC = () => {
   const navigateTo = useNavigate();
-
-  const navigateToHome = () => {
-    navigateTo("/");
-  };
 
   return (
     <PageLayout>
