@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { HomeScreen } from "./pages/Home";
 import { LeaderboardPage } from "./pages/Leaderboard";
 import "./index.css";
+import { UserPage } from "./pages/UserPage";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/leaderboard",
     element: <LeaderboardPage />,
+  },
+  {
+    path: "/user",
+    element: <UserPage />,
   },
 ]);
 
