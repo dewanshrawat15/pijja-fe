@@ -1,6 +1,6 @@
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { CreateUserDTO, UserDTO } from "./models";
+import { BuyPizzaRequestDTO, BuyPizzaResponseDTO, CreateUserDTO, PurchasePizzaResponseDTO, UserDTO } from "./models";
 
 export const queryClient = new QueryClient()
 
@@ -23,4 +23,13 @@ export const useGetAllPlayersDetails = () => {
         queryKey: ['registered-users'],
         queryFn: () => getAllUsers()
     })
+}
+
+export const getAvailablePizzasToBuy = async () => {
+    return (await axios.get<BuyPizzaResponseDTO>('http://localhost:8000/api/pizza/buy/')).data;
+}
+
+export const buyPizza = async (request: BuyPizzaRequestDTO) => {
+    const response = await axios.post<PurchasePizzaResponseDTO>('http://localhost:8000/api/pizza/buy/', request);
+    return response.data
 }
