@@ -1,6 +1,6 @@
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { BuyPizzaRequestDTO, BuyPizzaResponseDTO, CreateUserDTO, LogPizzaRequestDTO, LogPizzaToGetResponseDTO, MessageResponseDTO, UserDTO, UserIDDTO } from "./models";
+import { BuyPizzaRequestDTO, BuyPizzaResponseDTO, CreateUserDTO, LogPizzaRequestDTO, LogPizzaToGetResponseDTO, MessageResponseDTO, PijjaDetailed, UserDTO, UserIDDTO } from "./models";
 
 export const queryClient = new QueryClient()
 
@@ -9,7 +9,7 @@ export const createNewUser = (createUserDTO: CreateUserDTO) => {
 }
 
 export const deleteUser = async (user_id: string) => {
-    const response = await axios.delete(`http://localhost:8000/api/user/${user_id}/`)
+    const response = await axios.delete(`http://localhost:8000/api/user/${user_id}`)
     return response.data
 }
 
@@ -42,4 +42,8 @@ export const getPizzasAvailableToLog = async (request: UserIDDTO) => {
 export const logPizza = async (request: LogPizzaRequestDTO) => {
     const response = await axios.post('http://localhost:8000/api/pizza/log/', request);
     return response.data
+}
+
+export const getHistory = async (user_id: string) => {
+    return (await axios.get<PijjaDetailed[]>(`http://localhost:8000/api/user/${user_id}/history`)).data;
 }

@@ -54,3 +54,7 @@ export interface LogPizzaRequestDTO {
 export interface MessageResponseDTO {
     message: string;
 }
+
+export interface PijjaDetailed extends Pizza {
+    last_modified_at: number;
+}

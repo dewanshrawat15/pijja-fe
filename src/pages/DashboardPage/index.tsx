@@ -3,15 +3,17 @@ import { PageLayout } from "../../components/PageLayout";
 import {
   deleteUser,
   getAvailablePizzasToBuy,
+  getHistory,
   getPizzasAvailableToLog,
   useGetAllPlayersDetails,
 } from "../../common/api";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { Pizza } from "../../common/models";
+import { PijjaDetailed, Pizza } from "../../common/models";
 import React from "react";
 import { BuyPizzaModal } from "./modals/BuyPizzaModal";
 import { LogPizzaModal } from "./modals/LogPizzaModal";
+import { PizzaHistoryModal } from "./modals/PizzaHistoryModal";
 
 export const DashboardPage = () => {
   const [currUser, setCurrentUser] = useState<string | undefined>(undefined);
@@ -23,10 +25,14 @@ export const DashboardPage = () => {
   // buy pizza utils
   const [buyPizzaOpen, setBuyPizzaOpen] = useState(false);
   const [pizzasAvailableToBuy, setPizzasAvailableToBuy] = useState<Pizza[]>([]);
-  const [pizzasAvailableToLog, setPizzasAvailableToLog] = useState<Pizza[]>([]);
 
   // log pizza utils
   const [logPizzaOpen, setLogPizzaOpen] = useState(false);
+  const [pizzasAvailableToLog, setPizzasAvailableToLog] = useState<Pizza[]>([]);
+
+  // history pizza utils
+  const [historyPizzaOpen, setHistoryPizzaOpen] = useState(false);
+  const [pizzaHistory, setPizzaHistory] = useState<PijjaDetailed[]>([]);
 
   if (isLoading) {
     return (
@@ -97,6 +103,7 @@ export const DashboardPage = () => {
                 className="bttn"
                 onClick={() => {
                   deleteUser(user.user_id);
+                  window.location.reload();
                 }}
               >
                 <Typography.Paragraph style={{ margin: 0, color: "#FFF" }}>
@@ -109,8 +116,8 @@ export const DashboardPage = () => {
                 className="bttn"
                 onClick={async () => {
                   try {
-                    setCurrentUser(user.user_id);
                     const response = await getAvailablePizzasToBuy();
+                    setCurrentUser(user.user_id);
                     setPizzasAvailableToBuy(response.pizzas);
                     setBuyPizzaOpen(true);
                   } catch (error) {
@@ -129,10 +136,10 @@ export const DashboardPage = () => {
                 className="bttn"
                 onClick={async () => {
                   try {
-                    setCurrentUser(user.user_id);
                     const response = await getPizzasAvailableToLog({
                       user_id: user.user_id,
                     });
+                    setCurrentUser(user.user_id);
                     setPizzasAvailableToLog(response.pijjas);
                     setLogPizzaOpen(true);
                   } catch (error) {
@@ -146,7 +153,23 @@ export const DashboardPage = () => {
               </div>
             </Col>
             <Col span={3} offset={1}>
-              <div className="bttn">
+              <div
+                className="bttn"
+                onClick={async () => {
+                  try {
+                    setCurrentUser(user.user_id);
+                    const response = await getHistory(user.user_id);
+                    setPizzaHistory(response);
+                    setHistoryPizzaOpen(true);
+                  } catch (error) {
+                    console.error(error);
+                    api.error({
+                      message: `Error while fetching history for ${user.user_name}`,
+                      placement: "topRight",
+                    });
+                  }
+                }}
+              >
                 <Typography.Paragraph style={{ margin: 0, color: "#FFF" }}>
                   <center>Pizza History</center>
                 </Typography.Paragraph>
@@ -179,6 +202,13 @@ export const DashboardPage = () => {
                 invalidateUser={() => setCurrentUser(undefined)}
                 api={api}
                 currUser={currUser}
+              />
+              <PizzaHistoryModal
+                pizzas={pizzaHistory}
+                setOpen={(newState) => setHistoryPizzaOpen(newState)}
+                open={historyPizzaOpen}
+                invalidateUser={() => setCurrentUser(undefined)}
+                userDto={data.find((e) => currUser === e.user_id)}
               />
             </Col>
           </Row>
