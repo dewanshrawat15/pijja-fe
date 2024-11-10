@@ -57,6 +57,7 @@ export const BuyPizzaModal = ({
                           pijja_id: pizza.pijja_id,
                         });
                         setOpen(false);
+                        invalidateUser();
                         api.info({
                           message: `Pizza purchased successfully`,
                           placement: "topRight",

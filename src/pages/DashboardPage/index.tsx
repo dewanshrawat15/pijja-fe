@@ -14,6 +14,7 @@ import React from "react";
 import { BuyPizzaModal } from "./modals/BuyPizzaModal";
 import { LogPizzaModal } from "./modals/LogPizzaModal";
 import { PizzaHistoryModal } from "./modals/PizzaHistoryModal";
+import { getRsFromPaise } from "../../common/utils";
 
 export const DashboardPage = () => {
   const [currUser, setCurrentUser] = useState<string | undefined>(undefined);
@@ -21,6 +22,7 @@ export const DashboardPage = () => {
 
   // data fetching hook
   const { data, isLoading, isError } = useGetAllPlayersDetails();
+  console.info(data);
 
   // buy pizza utils
   const [buyPizzaOpen, setBuyPizzaOpen] = useState(false);
@@ -88,7 +90,9 @@ export const DashboardPage = () => {
     const currItems = data.map((user) => {
       return {
         key: user.user_id,
-        label: user.user_name,
+        label:
+          user.user_name +
+          ` - Wallet amount ${getRsFromPaise(user.wallet_amount)}`,
         children: (
           <Row>
             <Col span={3}>
@@ -192,7 +196,10 @@ export const DashboardPage = () => {
                 api={api}
                 currUser={currUser}
                 setOpen={(newState) => setBuyPizzaOpen(newState)}
-                invalidateUser={() => setCurrentUser(undefined)}
+                invalidateUser={() => {
+                  setCurrentUser(undefined);
+                  window.location.reload();
+                }}
               />
 
               <LogPizzaModal

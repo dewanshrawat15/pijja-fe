@@ -58,3 +58,18 @@ export interface MessageResponseDTO {
 export interface PijjaDetailed extends Pizza {
     last_modified_at: number;
 }
+
+export interface LeaderboardUser {
+    name: string;
+    rank: number;
+    pizzas: LeaderboardPijja[];
+}
+
+export interface LeaderboardPijja {
+    name: string;
+    timestamp: number;
+}
+
+export interface LeaderboardResponse {
+    [userId: string]: LeaderboardUser; 
+}

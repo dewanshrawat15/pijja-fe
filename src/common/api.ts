@@ -1,6 +1,6 @@
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { BuyPizzaRequestDTO, BuyPizzaResponseDTO, CreateUserDTO, LogPizzaRequestDTO, LogPizzaToGetResponseDTO, MessageResponseDTO, PijjaDetailed, UserDTO, UserIDDTO } from "./models";
+import { BuyPizzaRequestDTO, BuyPizzaResponseDTO, CreateUserDTO, LeaderboardResponse, LogPizzaRequestDTO, LogPizzaToGetResponseDTO, MessageResponseDTO, PijjaDetailed, UserDTO, UserIDDTO } from "./models";
 
 export const queryClient = new QueryClient()
 
@@ -19,9 +19,12 @@ export const getAllUsers = async () => {
 }
 
 export const useGetAllPlayersDetails = () => {
+    
     return useQuery({
-        queryKey: ['registered-users'],
-        queryFn: () => getAllUsers()
+        queryKey: ['dashboard'],
+        queryFn: () => getAllUsers(),
+        staleTime: 10,
+        refetchOnMount: true
     })
 }
 
@@ -46,4 +49,19 @@ export const logPizza = async (request: LogPizzaRequestDTO) => {
 
 export const getHistory = async (user_id: string) => {
     return (await axios.get<PijjaDetailed[]>(`http://localhost:8000/api/user/${user_id}/history`)).data;
+}
+
+export const getLeaderboardData = async () => {
+    const response = await axios.get<LeaderboardResponse>("http://localhost:8000/api/leaderboard/");
+    return response.data;
+}
+
+export const useLeaderboardData = () => {
+    return useQuery({
+        queryKey: ['leaderboard'],
+        queryFn: () => getLeaderboardData(),
+        refetchInterval: 4000,
+        staleTime: 10,
+        refetchOnMount: true
+    })
 }

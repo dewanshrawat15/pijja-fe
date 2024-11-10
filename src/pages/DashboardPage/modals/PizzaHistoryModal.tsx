@@ -3,7 +3,7 @@ import {
   buildDateStringFromEpoch,
   getRsFromPaise,
 } from "../../../common/utils";
-import { PijjaDetailed, Pizza, UserDTO } from "../../../common/models";
+import { PijjaDetailed, UserDTO } from "../../../common/models";
 
 interface Props {
   open: boolean;
