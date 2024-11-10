@@ -33,10 +33,6 @@ export interface BuyPizzaRequestDTO {
     pijja_id: string;
 }
 
-export interface PurchasePizzaResponseDTO {
-    message: string;
-}
-
 export interface UserIDDTO {
     user_id: string;
 }
@@ -53,6 +49,10 @@ export interface LogPizzaRequestDTO {
 
 export interface MessageResponseDTO {
     message: string;
+}
+
+export interface UserDetailDTO extends MessageResponseDTO {
+    data: UserDTO;
 }
 
 export interface PijjaDetailed extends Pizza {

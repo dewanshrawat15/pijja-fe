@@ -1,22 +1,42 @@
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { BuyPizzaRequestDTO, BuyPizzaResponseDTO, CreateUserDTO, LeaderboardResponse, LogPizzaRequestDTO, LogPizzaToGetResponseDTO, MessageResponseDTO, PijjaDetailed, UserDTO, UserIDDTO } from "./models";
+import { BuyPizzaRequestDTO, BuyPizzaResponseDTO, CreateUserDTO, LeaderboardResponse, LogPizzaRequestDTO, LogPizzaToGetResponseDTO, MessageResponseDTO, PijjaDetailed, UserDetailDTO, UserDTO, UserIDDTO } from "./models";
 
 export const queryClient = new QueryClient()
 
+const apiClient = axios.create({
+    baseURL: 'http://localhost:8000/api/'
+})
+
 export const createNewUser = (createUserDTO: CreateUserDTO) => {
-    return axios.post('http://localhost:8000/api/user/', createUserDTO)
+    return apiClient.post('user/', createUserDTO)
 }
 
 export const deleteUser = async (user_id: string) => {
-    const response = await axios.delete(`http://localhost:8000/api/user/${user_id}`)
+    const response = await apiClient.delete(`user/${user_id}`)
     return response.data
 }
 
-export const getAllUsers = async () => {
-    const response = await axios.get<UserDTO[]>('http://localhost:8000/api/user/')
+
+export const getUserDetail = async (userId: string | undefined) => {
+    const response = await apiClient.get<UserDetailDTO>(`user/${userId}`)
     return response.data
 }
+
+export const useGetPlayerDetails = (userId: string | undefined) => {
+    return useQuery({
+        queryKey: ['user-details', userId],
+        queryFn: () => getUserDetail(userId),
+        staleTime: 10,
+        refetchOnMount: true
+    })
+}
+
+export const getAllUsers = async () => {
+    const response = await apiClient.get<UserDTO[]>('user/')
+    return response.data
+}
+
 
 export const useGetAllPlayersDetails = () => {
     
@@ -29,30 +49,30 @@ export const useGetAllPlayersDetails = () => {
 }
 
 export const getAvailablePizzasToBuy = async () => {
-    return (await axios.get<BuyPizzaResponseDTO>('http://localhost:8000/api/pizza/buy/')).data;
+    return (await apiClient.get<BuyPizzaResponseDTO>('pizza/buy/')).data;
 }
 
 export const buyPizza = async (request: BuyPizzaRequestDTO) => {
-    const response = await axios.post<MessageResponseDTO>('http://localhost:8000/api/pizza/buy/', request);
+    const response = await apiClient.post<MessageResponseDTO>('pizza/buy/', request);
     return response.data
 }
 
 export const getPizzasAvailableToLog = async (request: UserIDDTO) => {
-    const response = await axios.post<LogPizzaToGetResponseDTO>('http://localhost:8000/api/pizza/log/get/', request);
+    const response = await apiClient.post<LogPizzaToGetResponseDTO>('pizza/log/get/', request);
     return response.data
 }
 
 export const logPizza = async (request: LogPizzaRequestDTO) => {
-    const response = await axios.post('http://localhost:8000/api/pizza/log/', request);
+    const response = await apiClient.post('pizza/log/', request);
     return response.data
 }
 
 export const getHistory = async (user_id: string) => {
-    return (await axios.get<PijjaDetailed[]>(`http://localhost:8000/api/user/${user_id}/history`)).data;
+    return (await apiClient.get<PijjaDetailed[]>(`user/${user_id}/history`)).data;
 }
 
 export const getLeaderboardData = async () => {
-    const response = await axios.get<LeaderboardResponse>("http://localhost:8000/api/leaderboard/");
+    const response = await apiClient.get<LeaderboardResponse>("leaderboard/");
     return response.data;
 }
 
@@ -64,4 +84,9 @@ export const useLeaderboardData = () => {
         staleTime: 10,
         refetchOnMount: true
     })
+}
+
+export const updateUserDetails = async(userId: string, userCreationDTO: CreateUserDTO) => {
+    const response = await apiClient.post<MessageResponseDTO>(`user/${userId}`, userCreationDTO);
+    return response.data;
 }

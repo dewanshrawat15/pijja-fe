@@ -15,14 +15,15 @@ import { BuyPizzaModal } from "./modals/BuyPizzaModal";
 import { LogPizzaModal } from "./modals/LogPizzaModal";
 import { PizzaHistoryModal } from "./modals/PizzaHistoryModal";
 import { getRsFromPaise } from "../../common/utils";
+import { useNavigate } from "react-router-dom";
 
 export const DashboardPage = () => {
   const [currUser, setCurrentUser] = useState<string | undefined>(undefined);
   const [api, contextHolder] = notification.useNotification();
+  const navigateTo = useNavigate();
 
   // data fetching hook
   const { data, isLoading, isError } = useGetAllPlayersDetails();
-  console.info(data);
 
   // buy pizza utils
   const [buyPizzaOpen, setBuyPizzaOpen] = useState(false);
@@ -96,7 +97,12 @@ export const DashboardPage = () => {
         children: (
           <Row>
             <Col span={3}>
-              <div className="bttn">
+              <div
+                className="bttn"
+                onClick={() => {
+                  navigateTo(`/user/edit/${user.user_id}`);
+                }}
+              >
                 <Typography.Paragraph style={{ margin: 0, color: "#FFF" }}>
                   <center>Edit</center>
                 </Typography.Paragraph>

@@ -9,6 +9,7 @@ import { UserPage } from "./pages/UserPage";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./common/api";
 import { DashboardPage } from "./pages/DashboardPage";
+import { UserEditPage } from "./pages/UserEditPage";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/user",
     element: <UserPage />,
+  },
+  {
+    path: "/user/edit/:userId",
+    element: <UserEditPage />,
   },
   {
     path: "/dashboard",

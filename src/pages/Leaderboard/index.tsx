@@ -7,7 +7,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { buildDateStringFromEpoch } from "../../common/utils";
 
 export const LeaderboardPage: React.FC = () => {
-  const [contextHolder] = notification.useNotification();
+  const [api, contextHolder] = notification.useNotification();
   const { isLoading, isError, data } = useLeaderboardData();
 
   if (isLoading) {
