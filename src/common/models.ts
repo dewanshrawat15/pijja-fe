@@ -36,3 +36,21 @@ export interface BuyPizzaRequestDTO {
 export interface PurchasePizzaResponseDTO {
     message: string;
 }
+
+export interface UserIDDTO {
+    user_id: string;
+}
+
+export interface LogPizzaToGetResponseDTO {
+    message: string;
+    pijjas: Pizza[];
+}
+
+export interface LogPizzaRequestDTO {
+    pijja_id: string;
+    user_id: string;
+}
+
+export interface MessageResponseDTO {
+    message: string;
+}
